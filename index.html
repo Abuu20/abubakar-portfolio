@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AbuBakar Issa Sabalah // Cybersecurity Analyst</title>
+<meta name="description" content="AbuBakar Issa Sabalah - Cybersecurity Analyst, Ethical Hacker, Python Developer based in Dar es Salaam, Tanzania.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     EASY-EDIT ZONE
+     Change colors, name, bio text, etc. by editing the CSS
+     variables below and the content further down in the HTML.
+     ============================================================ */
+  :root{
+    --bg:            #070a08;
+    --bg-alt:        #0c100d;
+    --surface:       #10160f;
+    --surface-2:     #141c15;
+    --border:        #1f2e20;
+    --border-bright: #2c4a2e;
+    --green:         #3ef07a;
+    --green-dim:     #23a656;
+    --green-glow:    rgba(62, 240, 122, 0.35);
+    --amber:         #ffb454;
+    --red:           #ff5c5c;
+    --text:          #d6e6da;
+    --text-dim:      #7fa88a;
+    --text-faint:    #45604c;
+    --mono-display:  'JetBrains Mono', monospace;
+    --mono-body:     'IBM Plex Mono', monospace;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--mono-body);
+    line-height:1.6;
+    overflow-x:hidden;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(62,240,122,0.08), transparent),
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 2px);
+  }
+
+  ::selection{ background:var(--green); color:var(--bg); }
+
+  a{ color:var(--green); text-decoration:none; }
+
+  /* Scanline overlay for terminal feel */
+  .scanline-overlay{
+    position:fixed; inset:0; pointer-events:none; z-index:9999;
+    background:linear-gradient(rgba(18,255,131,0.02) 50%, rgba(0,0,0,0.02) 50%);
+    background-size:100% 4px;
+    opacity:0.5;
+  }
+
+  /* ---------- Layout shell ---------- */
+  .wrap{ max-width:980px; margin:0 auto; padding:0 24px; }
+
+  /* ---------- Top nav ---------- */
+  header{
+    position:sticky; top:0; z-index:100;
+    background:rgba(7,10,8,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    height:56px;
+  }
+  .brand{
+    font-family:var(--mono-display); font-weight:700; font-size:15px;
+    color:var(--green); letter-spacing:0.5px;
+  }
+  .brand .prompt{ color:var(--text-faint); }
+  nav ul{
+    list-style:none; display:flex; gap:4px; font-size:13px;
+  }
+  nav a{
+    color:var(--text-dim); padding:8px 12px; border-radius:3px;
+    transition:all 0.15s ease; display:inline-block;
+  }
+  nav a::before{ content:"./"; color:var(--text-faint); }
+  nav a:hover{ color:var(--green); background:var(--surface); }
+  .nav-toggle{ display:none; }
+
+  /* ---------- Hero / Boot sequence ---------- */
+  .hero{
+    padding:64px 0 48px;
+    border-bottom:1px solid var(--border);
+  }
+  .terminal-window{
+    background:var(--surface);
+    border:1px solid var(--border-bright);
+    border-radius:8px;
+    overflow:hidden;
+    box-shadow:0 0 0 1px rgba(0,0,0,0.4), 0 20px 60px -20px rgba(62,240,122,0.15);
+  }
+  .term-titlebar{
+    display:flex; align-items:center; gap:8px;
+    padding:10px 14px;
+    background:var(--surface-2);
+    border-bottom:1px solid var(--border);
+  }
+  .term-dot{ width:11px; height:11px; border-radius:50%; }
+  .term-dot.red{ background:#ff5f56; }
+  .term-dot.yellow{ background:#ffbd2e; }
+  .term-dot.green{ background:#27c93f; }
+  .term-title{
+    flex:1; text-align:center; font-size:12px; color:var(--text-faint);
+    font-family:var(--mono-display);
+  }
+  .term-body{
+    padding:28px 28px 32px;
+    font-size:14px;
+  }
+  .term-line{ margin-bottom:6px; color:var(--text-dim); }
+  .term-line .path{ color:var(--green-dim); }
+  .term-line .cmd{ color:var(--text); }
+  .boot-ok{ color:var(--green); }
+  .boot-warn{ color:var(--amber); }
+
+  .hero-name{
+    font-family:var(--mono-display);
+    font-weight:800;
+    font-size:clamp(32px, 6vw, 52px);
+    color:var(--text);
+    margin:18px 0 4px;
+    letter-spacing:-0.5px;
+  }
+  .hero-name .cursor{
+    display:inline-block; width:0.55em; height:0.9em; background:var(--green);
+    margin-left:6px; vertical-align:-0.12em;
+    animation:blink 1s steps(1) infinite;
+    box-shadow:0 0 12px var(--green-glow);
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  .hero-title{
+    font-size:16px; color:var(--green); font-weight:600;
+    margin-bottom:16px;
+  }
+  .hero-title .sep{ color:var(--text-faint); margin:0 8px; }
+
+  .hero-bio{
+    max-width:640px; color:var(--text-dim); font-size:14.5px; margin-bottom:24px;
+  }
+
+  .hero-actions{ display:flex; gap:12px; flex-wrap:wrap; }
+  .btn{
+    font-family:var(--mono-display); font-size:13px; font-weight:600;
+    padding:11px 20px; border-radius:4px; border:1px solid var(--border-bright);
+    cursor:pointer; transition:all 0.15s ease; display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-primary{ background:var(--green); color:var(--bg); border-color:var(--green); }
+  .btn-primary:hover{ background:transparent; color:var(--green); box-shadow:0 0 20px var(--green-glow); }
+  .btn-ghost{ background:transparent; color:var(--text-dim); }
+  .btn-ghost:hover{ color:var(--green); border-color:var(--green-dim); }
+
+  /* ---------- Section shell ---------- */
+  section{ padding:56px 0; border-bottom:1px solid var(--border); }
+  .section-head{ display:flex; align-items:baseline; gap:12px; margin-bottom:28px; }
+  .section-num{ font-family:var(--mono-display); color:var(--text-faint); font-size:13px; }
+  .section-cmd{
+    font-family:var(--mono-display); font-size:13px; color:var(--green-dim);
+  }
+  .section-title{
+    font-family:var(--mono-display); font-weight:700; font-size:24px; color:var(--text);
+  }
+
+  /* ---------- About / photo ---------- */
+  .about-grid{ display:grid; grid-template-columns:180px 1fr; gap:32px; align-items:start; }
+  .photo-frame{
+    border:1px solid var(--border-bright); border-radius:8px; padding:6px;
+    background:var(--surface);
+  }
+  .photo-frame img{ width:100%; display:block; border-radius:4px; filter:grayscale(15%) contrast(1.05); }
+  .photo-caption{ text-align:center; font-size:11px; color:var(--text-faint); margin-top:8px; }
+  .about-text p{ color:var(--text-dim); margin-bottom:14px; font-size:14.5px; }
+  .about-text strong{ color:var(--text); }
+
+  /* ---------- Skills ---------- */
+  .skills-grid{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:12px;
+  }
+  .skill-card{
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:6px; padding:16px;
+  }
+  .skill-card-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  .skill-card-title{ font-family:var(--mono-display); font-size:13px; color:var(--text); font-weight:600; }
+  .skill-pct{ font-size:11px; color:var(--green); }
+  .bar-track{ height:6px; background:var(--bg-alt); border-radius:3px; overflow:hidden; border:1px solid var(--border); }
+  .bar-fill{ height:100%; background:linear-gradient(90deg, var(--green-dim), var(--green)); border-radius:3px; }
+
+  .tool-tags{ display:flex; flex-wrap:wrap; gap:8px; margin-top:24px; }
+  .tag{
+    font-size:12px; padding:6px 12px; border:1px solid var(--border-bright);
+    border-radius:20px; color:var(--text-dim); font-family:var(--mono-display);
+  }
+
+  /* ---------- Experience (timeline) ---------- */
+  .timeline{ position:relative; padding-left:24px; }
+  .timeline::before{
+    content:""; position:absolute; left:5px; top:6px; bottom:6px; width:2px;
+    background:linear-gradient(var(--green-dim), var(--border));
+  }
+  .tl-item{ position:relative; margin-bottom:28px; }
+  .tl-item:last-child{ margin-bottom:0; }
+  .tl-dot{
+    position:absolute; left:-24px; top:4px; width:12px; height:12px;
+    border-radius:50%; background:var(--bg); border:2px solid var(--green);
+    box-shadow:0 0 10px var(--green-glow);
+  }
+  .tl-role{ font-family:var(--mono-display); font-weight:700; font-size:15px; color:var(--text); }
+  .tl-org{ color:var(--green); font-size:13px; margin-bottom:2px; }
+  .tl-meta{ font-size:12px; color:var(--text-faint); margin-bottom:8px; }
+  .tl-desc{ color:var(--text-dim); font-size:14px; }
+
+  /* ---------- Projects ---------- */
+  .projects-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:18px; }
+  .project-card{
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:8px; padding:20px; display:flex; flex-direction:column;
+    transition:border-color 0.15s ease, transform 0.15s ease;
+  }
+  .project-card:hover{ border-color:var(--green-dim); transform:translateY(-2px); }
+  .project-head{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; }
+  .project-name{ font-family:var(--mono-display); font-weight:700; font-size:15px; color:var(--text); }
+  .project-lang{ font-size:11px; color:var(--amber); font-family:var(--mono-display); }
+  .project-desc{ color:var(--text-dim); font-size:13.5px; margin-bottom:14px; flex:1; }
+  .project-links{ display:flex; gap:14px; font-size:12.5px; }
+  .project-links a{ color:var(--green-dim); }
+  .project-links a:hover{ color:var(--green); }
+
+  /* ---------- Certifications ---------- */
+  .cert-row{
+    display:flex; align-items:center; gap:16px; background:var(--surface);
+    border:1px solid var(--border); border-radius:8px; padding:16px 20px;
+  }
+  .cert-icon{ font-size:22px; color:var(--amber); }
+  .cert-name{ font-family:var(--mono-display); font-weight:600; font-size:14px; color:var(--text); }
+  .cert-issuer{ font-size:12.5px; color:var(--text-dim); }
+
+  /* ---------- Contact ---------- */
+  .contact-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .contact-card{
+    background:var(--surface); border:1px solid var(--border); border-radius:8px;
+    padding:16px 18px; display:flex; align-items:center; gap:14px;
+  }
+  .contact-icon{ font-size:18px; width:28px; text-align:center; color:var(--green); }
+  .contact-label{ font-size:11px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.5px; }
+  .contact-value{ font-size:13.5px; color:var(--text); word-break:break-all; }
+  .contact-value a{ color:var(--text); }
+  .contact-value a:hover{ color:var(--green); }
+
+  footer{ padding:32px 0; text-align:center; }
+  footer p{ font-size:12px; color:var(--text-faint); font-family:var(--mono-display); }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:720px){
+    nav ul{ display:none; }
+    .about-grid{ grid-template-columns:1fr; }
+    .photo-frame{ width:160px; margin:0 auto; }
+    .contact-grid{ grid-template-columns:1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .hero-name .cursor{ animation:none; }
+  }
+
+  /* Fade-in on scroll */
+  .fade-in{ opacity:0; transform:translateY(16px); transition:opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible{ opacity:1; transform:translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="scanline-overlay"></div>
+
+<header>
+  <div class="wrap nav-inner">
+    <div class="brand"><span class="prompt">~$</span> abubakar.sh</div>
+    <nav>
+      <ul>
+        <li><a href="#about">whoami</a></li>
+        <li><a href="#skills">skills</a></li>
+        <li><a href="#experience">experience</a></li>
+        <li><a href="#projects">projects</a></li>
+        <li><a href="#contact">contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ================= HERO ================= -->
+  <section class="hero" style="border-bottom:none;">
+    <div class="terminal-window">
+      <div class="term-titlebar">
+        <span class="term-dot red"></span>
+        <span class="term-dot yellow"></span>
+        <span class="term-dot green"></span>
+        <span class="term-title">abubakar@feza-boys: ~</span>
+      </div>
+      <div class="term-body">
+        <div class="term-line"><span class="path">guest@portfolio</span>:<span class="cmd">~$</span> ./init_profile.sh</div>
+        <div class="term-line boot-ok">[ OK ] Loading identity record...</div>
+        <div class="term-line boot-ok">[ OK ] Verifying credentials... Cybersecurity Degree confirmed</div>
+        <div class="term-line boot-ok">[ OK ] Mounting skills: python, network-security, ethical-hacking</div>
+        <div class="term-line boot-warn">[ WARN ] Target has strong opinions about weak passwords</div>
+        <div class="term-line boot-ok">[ OK ] Session ready.</div>
+
+        <h1 class="hero-name">AbuBakar Issa Sabalah<span class="cursor"></span></h1>
+        <div class="hero-title">Cybersecurity Analyst<span class="sep">//</span>Ethical Hacker<span class="sep">//</span>Python Developer</div>
+        <p class="hero-bio">
+          Cybersecurity graduate focused on web and network security, working as a Python developer
+          and currently teaching Computer Science at Feza Boys Secondary and High School in Dar es Salaam.
+          Driven by finding vulnerabilities before attackers do — and building defenses that hold up in
+          the real world.
+        </p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn btn-primary">&gt; get_in_touch()</a>
+          <a href="#projects" class="btn btn-ghost">view --projects</a>
+          <a href="assets/networkwalks_certificate.pdf" target="_blank" class="btn btn-ghost">cat certificate.pdf</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ABOUT ================= -->
+  <section id="about">
+    <div class="section-head">
+      <span class="section-cmd">$ whoami</span>
+      <span class="section-title">About</span>
+    </div>
+    <div class="about-grid fade-in">
+      <div>
+        <div class="photo-frame">
+          <img src="assets/profile.png" alt="AbuBakar Issa Sabalah">
+        </div>
+        <div class="photo-caption">Dar es Salaam, Tanzania</div>
+      </div>
+      <div class="about-text">
+        <p>
+          I'm <strong>AbuBakar Issa Sabalah</strong>, a Cybersecurity graduate with a deep-rooted passion
+          for ethical hacking. My focus sits at the intersection of <strong>web security</strong> and
+          <strong>network security</strong> — understanding how systems break so I can help build ones
+          that don't.
+        </p>
+        <p>
+          Alongside my security work, I develop in <strong>Python</strong> and currently teach Computer
+          Science at <strong>Feza Boys Secondary and High School</strong>, where I get to pass on that
+          same curiosity about how technology works to the next generation.
+        </p>
+        <p>
+          What drives me is simple: uncovering vulnerabilities and defending systems against real-world
+          threats, one line of code and one packet capture at a time.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SKILLS ================= -->
+  <section id="skills">
+    <div class="section-head">
+      <span class="section-cmd">$ cat skills.txt</span>
+      <span class="section-title">Skills</span>
+    </div>
+    <div class="skills-grid fade-in">
+      <div class="skill-card">
+        <div class="skill-card-head"><span class="skill-card-title">Network Security</span><span class="skill-pct">90%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:90%"></div></div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-head"><span class="skill-card-title">Ethical Hacking</span><span class="skill-pct">85%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:85%"></div></div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-head"><span class="skill-card-title">Python Development</span><span class="skill-pct">88%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:88%"></div></div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-head"><span class="skill-card-title">Web App Security</span><span class="skill-pct">82%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:82%"></div></div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-head"><span class="skill-card-title">Routing Protocols (OSPF/EIGRP/BGP)</span><span class="skill-pct">80%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:80%"></div></div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-head"><span class="skill-card-title">Linux</span><span class="skill-pct">85%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:85%"></div></div>
+      </div>
+    </div>
+    <div class="tool-tags">
+      <span class="tag">Burp Suite</span>
+      <span class="tag">Wireshark</span>
+      <span class="tag">Nmap</span>
+      <span class="tag">Kali Linux</span>
+      <span class="tag">Scapy</span>
+      <span class="tag">Git / GitHub</span>
+      <span class="tag">Bash</span>
+    </div>
+  </section>
+
+  <!-- ================= EXPERIENCE ================= -->
+  <section id="experience">
+    <div class="section-head">
+      <span class="section-cmd">$ ls -la experience/</span>
+      <span class="section-title">Experience</span>
+    </div>
+    <div class="timeline fade-in">
+      <div class="tl-item">
+        <span class="tl-dot"></span>
+        <div class="tl-role">Computer Science Teacher</div>
+        <div class="tl-org">Feza Boys Secondary and High School</div>
+        <div class="tl-meta">2026 — Present · Dar es Salaam, Tanzania</div>
+        <p class="tl-desc">
+          Teaching Computer Science with an emphasis on practical, real-world understanding of
+          computing and security fundamentals — helping students build a genuine foundation rather
+          than just exam-ready theory.
+        </p>
+      </div>
+      <div class="tl-item">
+        <span class="tl-dot"></span>
+        <div class="tl-role">Freelance Python Developer & Security Researcher</div>
+        <div class="tl-org">Self-employed</div>
+        <div class="tl-meta">Ongoing</div>
+        <p class="tl-desc">
+          Building Python tools and scripts for clients, alongside independent security research —
+          from network reconnaissance utilities to static code analysis tools.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROJECTS ================= -->
+  <section id="projects">
+    <div class="section-head">
+      <span class="section-cmd">$ ls projects/</span>
+      <span class="section-title">Projects</span>
+    </div>
+    <div class="projects-grid fade-in">
+
+      <div class="project-card">
+        <div class="project-head">
+          <span class="project-name">Network Port Scanner</span>
+          <span class="project-lang">Python</span>
+        </div>
+        <p class="project-desc">Multithreaded TCP port scanner with service identification, built for fast authorized network audits.</p>
+        <div class="project-links">
+          <a href="https://github.com/Abuu20/network-port-scanner" target="_blank">GitHub →</a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-head">
+          <span class="project-name">Phishing URL Detector</span>
+          <span class="project-lang">Python</span>
+        </div>
+        <p class="project-desc">Heuristic scoring engine that flags phishing indicators in URLs — brand spoofing, shorteners, IP hosts, and more.</p>
+        <div class="project-links">
+          <a href="https://github.com/Abuu20/phishing-url-detector" target="_blank">GitHub →</a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-head">
+          <span class="project-name">Password Strength Auditor</span>
+          <span class="project-lang">Python</span>
+        </div>
+        <p class="project-desc">Entropy-based password auditor with breached-password detection and realistic crack-time estimation.</p>
+        <div class="project-links">
+          <a href="https://github.com/Abuu20/password-strength-auditor" target="_blank">GitHub →</a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-head">
+          <span class="project-name">Packet Sniffer & Traffic Analyzer</span>
+          <span class="project-lang">Python / Scapy</span>
+        </div>
+        <p class="project-desc">Live packet capture tool with protocol breakdown and top-talker analysis for network visibility.</p>
+        <div class="project-links">
+          <a href="https://github.com/Abuu20/packet-sniffer" target="_blank">GitHub →</a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-head">
+          <span class="project-name">Subdomain / Recon Enumerator</span>
+          <span class="project-lang">Python</span>
+        </div>
+        <p class="project-desc">Concurrent DNS-based subdomain enumeration tool for mapping attack surface during pentests.</p>
+        <div class="project-links">
+          <a href="https://github.com/Abuu20/subdomain-enum" target="_blank">GitHub →</a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-head">
+          <span class="project-name">App Vulnerability Scanner</span>
+          <span class="project-lang">Python (SAST)</span>
+        </div>
+        <p class="project-desc">Static code scanner that flags SQL injection, hardcoded secrets, weak crypto, and other insecure patterns with remediation tips.</p>
+        <div class="project-links">
+          <a href="https://github.com/Abuu20/app-vuln-scanner" target="_blank">GitHub →</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= CERTIFICATIONS ================= -->
+  <section id="certifications">
+    <div class="section-head">
+      <span class="section-cmd">$ ls -la certs/</span>
+      <span class="section-title">Certifications</span>
+    </div>
+    <div class="fade-in">
+      <div class="cert-row">
+        <span class="cert-icon">🎓</span>
+        <div>
+          <div class="cert-name">Networking, IT & Routing Protocols</div>
+          <div class="cert-issuer">Networkwalks Academy · Issued May 2024 · Cert No. 00B60-1619</div>
+        </div>
+        <div style="margin-left:auto;">
+          <a href="assets/networkwalks_certificate.pdf" target="_blank" class="tag" style="display:inline-block;">View PDF</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT ================= -->
+  <section id="contact" style="border-bottom:none;">
+    <div class="section-head">
+      <span class="section-cmd">$ ./contact --send</span>
+      <span class="section-title">Get In Touch</span>
+    </div>
+    <div class="contact-grid fade-in">
+      <div class="contact-card">
+        <span class="contact-icon">✉</span>
+        <div>
+          <div class="contact-label">Email</div>
+          <div class="contact-value"><a href="mailto:sabalahabubakar41@gmail.com">sabalahabubakar41@gmail.com</a></div>
+        </div>
+      </div>
+      <div class="contact-card">
+        <span class="contact-icon">☎</span>
+        <div>
+          <div class="contact-label">Phone</div>
+          <div class="contact-value">+255 784 267 751 / +255 615 347 751</div>
+        </div>
+      </div>
+      <div class="contact-card">
+        <span class="contact-icon">⌘</span>
+        <div>
+          <div class="contact-label">GitHub</div>
+          <div class="contact-value"><a href="https://github.com/Abuu20" target="_blank">github.com/Abuu20</a></div>
+        </div>
+      </div>
+      <div class="contact-card">
+        <span class="contact-icon">in</span>
+        <div>
+          <div class="contact-label">LinkedIn</div>
+          <div class="contact-value"><a href="https://www.linkedin.com/in/abubakar-sabalah" target="_blank">Abubakar Sabalah</a></div>
+        </div>
+      </div>
+      <div class="contact-card">
+        <span class="contact-icon">⚑</span>
+        <div>
+          <div class="contact-label">Location</div>
+          <div class="contact-value">Dar es Salaam, Tanzania</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>&copy; <span id="year"></span> AbuBakar Issa Sabalah — built with intent, secured by design.</p>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Scroll-triggered fade-in
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
